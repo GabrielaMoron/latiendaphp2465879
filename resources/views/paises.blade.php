@@ -13,28 +13,35 @@
         <thead class= "thead-dark">
             <tr>
                 <th>Pais</th>
-<th >capital "</th>
-<th>moneda</th>
-<th>poblacion</th>
+                <th >capital</th>
+                <th>moneda</th>
+                <th>poblacion</th>
+                <th>ciudades</th>
             </tr>
         </thead>
         <tbody>
             @foreach($paises as $pais => $infopais)
             <tr>
-                <td>
+                <td rowspan="{{ count($infopais['ciudades']) }}">
                     {{$pais}}
                 </td>
-                <td>
+                <td  rowspan="{{ count($infopais['ciudades']) }}">
                     {{$infopais["capital"]}}
                 </td>
-                <td>
+                <td  rowspan="{{ count($infopais['ciudades']) }}">
                     {{$infopais["moneda"]}}
-                </td> <td>
+                </td> 
+                <td  rowspan="{{ count($infopais['ciudades']) }}">
                     {{$infopais["poblacion"]}}
                 </td>
-            </tr>
+          @foreach($infopais["ciudades"] as $ciudad)
+          <th>
+              {{ $ciudad }}
+            </th> 
+        </tr>
             @endforeach
-        </tbody>
+           @endforeach
+</tbody>
         <tfoot></tfoot>
 </table>
 </body>
