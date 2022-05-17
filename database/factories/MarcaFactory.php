@@ -14,7 +14,7 @@ class MarcaFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'nombre'=>$this->faker->country()
         ];
     }
 }

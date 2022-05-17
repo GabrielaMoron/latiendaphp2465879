@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route; 
+use App\Http\Controllers\ProductoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,3 +52,8 @@ return view('productos.new');
 
 
 });
+//Rutas REST 
+//PREODUCTO
+
+Route::resource('productos', ProductoController::class);
+
