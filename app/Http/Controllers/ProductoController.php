@@ -48,11 +48,14 @@ class ProductoController extends Controller
     {
         //reglas de validacion
         $reglas=[
-"nombre"=>'required|alpha',
+"nombre"=>'required|alpha|unique:productos,nombre',
 "desc"=>'required|min:10|max:20',
 "precio"=>'required|numeric',
 "marca"=>'required',
-"categoria"=>'required'
+"categoria"=>'required',
+"imagen"=>'required|image'
+
+
 
 
 
@@ -61,7 +64,9 @@ class ProductoController extends Controller
 $mensajes =[
     "required"=> "campo obligatorio",
     "numeric"=> "solo numeros ",
-    "alpha"=> "solo letras"
+    "alpha"=> "solo letras",
+    "image"=>"solo imagenes",
+    "unique"=>"el de producto ya se ha tomado"
 ];
 
        //crear el objeto validador
@@ -76,11 +81,21 @@ $mensajes =[
            ->withErrors($v)
            ->withInput();
 
-       }else{
-        $p= new Producto;
+       }else{ 
+//ASIGNAR A UNA VARIABLE: NOMBRE_ARCHIVO 
+         $nombre_archivo = $r->imagen->getClientOriginalName() ;
+         $archivo=$r->imagen;
+//MOVER EL ARCHIVO  en la carpeta public
+
+var_dump (public_path());
+$ruta = public_path().'/img';
+$archivo->move($ruta,$nombre_archivo);
+           //REGLAS DE VALIDACIÓN
+       $p= new Producto;
         $p->nombre=$r->nombre;
         $p->desc=$r->desc;
         $p->precio=$r->precio;
+        $p->imagen= $nombre_archivo;
         $p->marca_id=$r->marca;
         $p->categoria_id=$r->categoria;
   

@@ -19,7 +19,8 @@
   <div class="row">
       <form class='col s8'
          method="POST"
-         action="{{ route('productos.store')}}">
+         action="{{ route('productos.store')}}"
+         enctype="multipart/form-data">
          @csrf
          <div class="row">
           <div class="input-field col s8">
@@ -82,11 +83,12 @@
             <div class="file-field input-field">
                 <div class="btn #7986cb indigo lighten-2">
                     <span>Imagen ...</span>
-                    <input type="file">
+                    <input type="file" name="imagen">
                 </div>
                 <div class="file-path-wrapper">
                     <input class="file-path validate" type="text">
                 </div>
+                <span> {{ $errors->first('imagen') }}</span>
             </div>
         </div>
         <div class="row">
