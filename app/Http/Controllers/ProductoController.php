@@ -18,7 +18,13 @@ class ProductoController extends Controller
      */
     public function index()
     {
-       echo"aqui va el catalogo de productos";
+       
+        //seleccion de todos los productos
+        $productos=Producto::all();
+        //mostrar vista del catalogo pero llevando la lista de productos
+        return view('productos.index')
+                ->with('productos', $productos);
+
     }
 
     /**
@@ -49,53 +55,48 @@ class ProductoController extends Controller
         //reglas de validacion
         $reglas=[
 "nombre"=>'required|alpha|unique:productos,nombre',
-"desc"=>'required|min:10|max:20',
+"desc"=>'required|min:10|max:50',
 "precio"=>'required|numeric',
-"marca"=>'required',
-"categoria"=>'required',
-"imagen"=>'required|image'
+"marca" => 'required',
+"categoria" => 'required',
+"imagen" => 'required|image'
 
-
-
-
-
-       ];
-       //mensajes personalizados por regla
-$mensajes =[
-    "required"=> "campo obligatorio",
-    "numeric"=> "solo numeros ",
-    "alpha"=> "solo letras",
-    "image"=>"solo imagenes",
-    "unique"=>"el de producto ya se ha tomado"
+];
+//mensajes personalizados por regla 
+$mensajes = [
+    "required" => "campos obligatorios",
+    "numeric" => "solo numeros",
+    "alpha" => "solo letras",
+    "image" => "solo debe ingresar imagenes",
+    "unique"=> "nombre de producto ya registrado"
+ 
 ];
 
-       //crear el objeto validador
-
+      
+//crear el objeto validador
        $v = Validator ::make($r->all(),$reglas,$mensajes);
        var_dump($v->fails());
-       //validar datos: validar metodo fails
+       
        if($v->fails()){
-
-
         return redirect('productos/create')
-           ->withErrors($v)
-           ->withInput();
+        ->withErrors($v)
+        ->withInput();
 
-       }else{ 
-//ASIGNAR A UNA VARIABLE: NOMBRE_ARCHIVO 
-         $nombre_archivo = $r->imagen->getClientOriginalName() ;
-         $archivo=$r->imagen;
-//MOVER EL ARCHIVO  en la carpeta public
+       }else{
+           //analizar el objeto file del request
+//asignar a la variable nombre archivo 
+           $nombre_archivo = $r->imagen->getClientOriginalName(); 
+           $archivo = $r->imagen;
+           //mover el archivo a la carpeta public 
+           var_dump(public_path());
+           $ruta = public_path().'/img';
+           $archivo->move($ruta, $nombre_archivo);
 
-var_dump (public_path());
-$ruta = public_path().'/img';
-$archivo->move($ruta,$nombre_archivo);
-           //REGLAS DE VALIDACIÓN
-       $p= new Producto;
+        $p= new Producto;
         $p->nombre=$r->nombre;
         $p->desc=$r->desc;
         $p->precio=$r->precio;
-        $p->imagen= $nombre_archivo;
+        $p->imagen=$nombre_archivo;
         $p->marca_id=$r->marca;
         $p->categoria_id=$r->categoria;
   
@@ -130,7 +131,9 @@ $archivo->move($ruta,$nombre_archivo);
      */
     public function show($producto)
     {
-       echo"aqui va la información del producto cuyo id es : $producto";
+      $producto = Producto::find($producto);
+      return view('productos.details')
+      ->with('producto',$producto);
     }
 
     /**
